@@ -4,29 +4,43 @@
  * "A bit of fragrance clings to the hand that gives flowers!"
  */
 
-import express from 'express'
-import { mapOrder } from '~/utils/sorts.js'
+import express from 'express';
+import {APIs_V1} from '~/routes/v1';
 
-const app = express()
+import exitHook from 'async-exit-hook';
+import { connectToMongoDB, closedb } from '~/config/mongodb';
+import 'dotenv/config';
+// chay server
+const start_server = () => {
+  const app = express();
 
-const hostname = 'localhost'
-const port = 8017
+  app.use('/v1', APIs_V1);
 
-app.get('/', (req, res) => {
-  // Test Absolute import mapOrder
-  console.log(mapOrder(
-    [ { id: 'id-1', name: 'One' },
-      { id: 'id-2', name: 'Two' },
-      { id: 'id-3', name: 'Three' },
-      { id: 'id-4', name: 'Four' },
-      { id: 'id-5', name: 'Five' } ],
-    ['id-5', 'id-4', 'id-2', 'id-3', 'id-1'],
-    'id'
-  ))
-  res.end('<h1>Hello World!</h1><hr>')
-})
+  const hostname = 'localhost';
+  const port = 8017;
 
-app.listen(port, hostname, () => {
-  // eslint-disable-next-line no-console
-  console.log(`Hello Trung Quan Dev, I am running at ${ hostname }:${ port }/`)
-})
+  // list collection tu database
+  app.get('/', async (req, res) => {
+    res.end('Welcome to Trello API');
+  });
+
+  app.listen(port, hostname, () => {
+    // eslint-disable-next-line no-console
+    console.log(`3.Hello ${process.env.AUTHOR}, I am running at ${hostname}:${port}/`);
+  });
+
+  exitHook(() => {
+    closedb();
+  });
+};
+
+// ket noi database
+// chi khi ket noi thanh cong moi chay server
+console.log('1.Connecting to MongoDB...');
+connectToMongoDB()
+  .then(() => console.log('2.Connected to MongoDB'))
+  .then(() => start_server())
+  .catch(() => {
+    console.error('Error connecting');
+    process.exit(0);
+  });
