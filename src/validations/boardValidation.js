@@ -21,18 +21,13 @@ const createNew = async (req, res, next) => {
   })
 
   try {
-    console.log('req.body',req.body)
-
     await correctConditions.validateAsync(req.body,{
         abortEarly: false, // chi dinh abort early: false[defaut: true] de truong hop co nhieu loi thi tra ve tat ca loi
         allowUnknown: true,
         stripUnknown: true
     })
 
-    // next()
-  res.status(StatusCodes.CREATED).json({
-    message: 'Create a new board',
-  })
+    next() //de chuyen qua middleware hoac controller tiep theo
     } catch (err) {
         console.log(err);
     res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({

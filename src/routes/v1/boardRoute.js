@@ -6,15 +6,16 @@
 import express from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { boardValidation } from '~/validations/boardValidation';
+import { boardController} from '~/controllers/boardController';
 
 const router = express.Router();
 
-router.route('/')
+router.route('/:id')
     .get((req, res) => {
         res.status(StatusCodes.OK).json({
             message: 'Welcome to Trello API'
         })
     })
-    .post(boardValidation.createNew)
+    .post(boardValidation.createNew, boardController.createNew);
 
 export const boardRoutes = router
