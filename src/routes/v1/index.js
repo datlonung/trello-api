@@ -7,17 +7,19 @@
 
 import express from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { boardRouters } from '~/routes/v1/boardRoute';
+import { boardRoutes } from '~/routes/v1/boardRoute';
 
 const router = express.Router();
 
+//check apis v1/status
 router.get('/status', (req, res) => {
-    res.status(StatusCodes.OK).json({
-        message: 'Service API v1 is running'
-    });
+  res.status(StatusCodes.OK).json({
+    message: 'Service API v1 is running'
+  });
 });
+
 // boardAPI
-// router.use('/boards', boardRouters);
+router.use('/boards', boardRoutes)
 
 
 export const APIs_V1 = router

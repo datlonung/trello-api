@@ -14,7 +14,10 @@ import 'dotenv/config';
 const start_server = () => {
   const app = express();
 
-  app.use('/v1', APIs_V1);
+
+  app.use(express.json()); // enable req.body data
+  app.use('/v1', APIs_V1); // use api v1
+
 
   const hostname = 'localhost';
   const port = 8017;
